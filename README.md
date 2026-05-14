@@ -194,5 +194,5 @@ Widget mainAppPreview() => const MainApp();
 
 ### Flutter Logging
 
-![Flutter Logging](documents/Capture d'écran 2026-05-14 165830.png)
+![Flutter Logging](documents/Capture%20d'écran%202026-05-14%20165830.png)
 
