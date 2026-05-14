@@ -143,3 +143,56 @@ La colonne dispose ses éléments enfants le long de l'axe vertical, tandis que 
 Une mise en page de style Material avec des emplacements pour la barre d'application, le corps, le tiroir, et plus encore.
 Scaffold est un widget pratique qui fournit une structure de page Material standard.
 
+## Debug mode
+
+Selectionner en bas à droite de vscode votre device.
+Ouvrir la class main de votre app.
+Puis cliquer sur Run et debug mode de vscode
+![Run et debug](<documents/Capture d'écran 2026-05-14 160442.png>)
+Vosu pouvez aussi acceder au debug mode apres avoir fais votre _flutter run -d emulator-5554_.
+Dans ce cas vous trouverez dans les logs l'url d'acces (http://127.0.0.1:55851/FGdRUadxBFc=/devtools/?uri=ws://127.0.0.1:55851/FGdRUadxBFc=/ws)
+
+### Flutter widget preview
+
+Annoted vos widget @Preview.
+
+```sh
+@Preview(name: 'Tile')
+Widget tilePreview() => const Tile('A', HitType.hit);
+
+@Preview(name: 'GamePage')
+Widget gamePagePreview() => GamePage();
+
+@Preview(name: 'MainApp')
+Widget mainAppPreview() => const MainApp();
+```
+
+* Demmarrer en mode de debug
+* Activer le mode widget-preview
+
+![Flutter widget preview](<documents/Capture d'écran 2026-05-14 163124.png>)
+
+### Flutter widget inspector
+
+![Flutter widget inspector](<documents/Capture d'écran 2026-05-14 163234.png>)
+
+### Flutter properties editor
+
+![Flutter properties editor](<documents/Capture d'écran 2026-05-14 164754.png>)
+
+### Flutter performance
+
+![Flutter performance](<documents/Capture d'écran 2026-05-14 165250.png>)
+
+### Flutter memory
+
+![Flutter memory](<documents/Capture d'écran 2026-05-14 165508.png>)
+
+### Flutter Network
+
+![Flutter Network](<documents/Capture d'écran 2026-05-14 165703.png>)
+
+### Flutter Logging
+
+![Flutter Logging](<documents/Capture d'écran 2026-05-14 165830.png>)
+

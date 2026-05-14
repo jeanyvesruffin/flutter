@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widget_previews.dart';
 import 'game.dart';
 
 void main() {
   runApp(const MainApp());
 }
+
+@Preview(name: 'Tile')
+Widget tilePreview() => const Tile('A', HitType.hit);
+
+@Preview(name: 'GamePage')
+Widget gamePagePreview() => GamePage();
+
+@Preview(name: 'MainApp')
+Widget mainAppPreview() => const MainApp();
+
+
 
 class Tile extends StatelessWidget {
   const Tile(this.letter, this.hitType, {super.key});
