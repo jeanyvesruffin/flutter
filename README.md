@@ -133,3 +133,13 @@ class Tile extends StatelessWidget {
 }
 ```
 
+## Disposition des widgets
+
+* Quelle est la principale différence entre un widget Colonne et un widget Ligne ?
+La colonne dispose les enfants verticalement ; la ligne les dispose horizontalement.
+La colonne dispose ses éléments enfants le long de l'axe vertical, tandis que la ligne utilise l'axe horizontal.
+
+* Que fournit le widget Scaffold dans une application Flutter ?
+Une mise en page de style Material avec des emplacements pour la barre d'application, le corps, le tiroir, et plus encore.
+Scaffold est un widget pratique qui fournit une structure de page Material standard.
+
