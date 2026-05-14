@@ -27,7 +27,7 @@ flutter devices
 
 ### Ajout d'un emulateur
 
-![Ajout d'un emulateur](<documents/Capture d'écran 2026-05-14 142214.png>)
+![Ajout d'un emulateur](documents/Capture%20d'écran%202026-05-14%20142214.png)
 
 ## Create application (exemple nom d'application birdle)
 
@@ -148,7 +148,7 @@ Scaffold est un widget pratique qui fournit une structure de page Material stand
 Selectionner en bas à droite de vscode votre device.
 Ouvrir la class main de votre app.
 Puis cliquer sur Run et debug mode de vscode
-![Run et debug](<documents/Capture d'écran 2026-05-14 160442.png>)
+![Run et debug](./documents/Capture d'écran 2026-05-14 160442.png)
 Vosu pouvez aussi acceder au debug mode apres avoir fais votre _flutter run -d emulator-5554_.
 Dans ce cas vous trouverez dans les logs l'url d'acces (http://127.0.0.1:55851/FGdRUadxBFc=/devtools/?uri=ws://127.0.0.1:55851/FGdRUadxBFc=/ws)
 
@@ -170,29 +170,29 @@ Widget mainAppPreview() => const MainApp();
 * Demmarrer en mode de debug
 * Activer le mode widget-preview
 
-![Flutter widget preview](<documents/Capture d'écran 2026-05-14 163124.png>)
+![Flutter widget preview](documents/Capture%20d'écran%202026-05-14%20163124.png)
 
 ### Flutter widget inspector
 
-![Flutter widget inspector](<documents/Capture d'écran 2026-05-14 163234.png>)
+![Flutter widget inspector](documents/Capture%20d'écran%202026-05-14%20163234.png)
 
 ### Flutter properties editor
 
-![Flutter properties editor](<documents/Capture d'écran 2026-05-14 164754.png>)
+![Flutter properties editor](documents/Capture%20d'écran%202026-05-14%20164754.png)
 
 ### Flutter performance
 
-![Flutter performance](<documents/Capture d'écran 2026-05-14 165250.png>)
+![Flutter performance](documents/Capture%20d'écran%202026-05-14%20165250.png)
 
 ### Flutter memory
 
-![Flutter memory](<documents/Capture d'écran 2026-05-14 165508.png>)
+![Flutter memory](documents/Capture%20d'écran%202026-05-14%20165508.png)
 
 ### Flutter Network
 
-![Flutter Network](<documents/Capture d'écran 2026-05-14 165703.png>)
+![Flutter Network](documents/Capture%20d'écran%202026-05-14%20165703.png)
 
 ### Flutter Logging
 
-![Flutter Logging](<documents/Capture d'écran 2026-05-14 165830.png>)
+![Flutter Logging](documents/Capture d'écran 2026-05-14 165830.png)
 
