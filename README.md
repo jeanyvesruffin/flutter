@@ -57,7 +57,7 @@ Modifier le code :
 child: Text('Hello World!'),
 ```
 
-Cliquer dans le terminal ou l'application est en cours d'execution (flutter run -d emulator-5554), Puis appuyer sur la touche  _r_.
+Cliquer dans le terminal ou l'application est en cours d'execution (flutter run -d emulator-5554), Puis appuyer sur la touche  `r`.
 
 ## Création et ajout de widgets
 
@@ -149,7 +149,7 @@ Selectionner en bas à droite de vscode votre device.
 Ouvrir la class main de votre app.
 Puis cliquer sur Run et debug mode de vscode
 ![Run et debug](./documents/Capture d'écran 2026-05-14 160442.png)
-Vosu pouvez aussi acceder au debug mode apres avoir fais votre _flutter run -d emulator-5554_.
+Vosu pouvez aussi acceder au debug mode apres avoir fais votre `flutter run -d emulator-5554`.
 Dans ce cas vous trouverez dans les logs l'url d'acces (http://127.0.0.1:55851/FGdRUadxBFc=/devtools/?uri=ws://127.0.0.1:55851/FGdRUadxBFc=/ws)
 
 ### Flutter widget preview
@@ -196,3 +196,12 @@ Widget mainAppPreview() => const MainApp();
 
 ![Flutter Logging](documents/Capture%20d'écran%202026-05-14%20165830.png)
 
+## User input
+
+Vous avez créé un GuessInputwidget de TextFieldsaisie de texte. Vous l'avez configuré avec une bordure arrondie, une limite de caractères et vous l'avez utilisé `Expanded` pour qu'il remplisse l'espace disponible dans la ligne.
+
+`TextEditingController` permet de lire et de modifier le contenu d'un champ texte. Vous l'avez utilisé pour capturer la saisie de l'utilisateur avec `text` et effacer le champ après la soumission avec `clear()`.
+
+Auparavant, l'autofocus mettait le champ de texte au premier lancement et _FocusNodele_ _requestFocus()_ sont conservait après chaque tentative. Ces détails donnent à votre application une impression de réactivité et de qualité.
+
+Pour répondre aux entrées de l'utilisateur, vous avez spécifié des fonctions de rappel comme `onSubmittedon` et `on` onPressed. Le passage de fonctions de rappel en tant qu'arguments du constructeur permet de conserver des widgets réutilisables et découplés de toute logique spécifique.
