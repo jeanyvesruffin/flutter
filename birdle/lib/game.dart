@@ -1,39 +1,39 @@
-/// Logique de jeu et types de support pour Birdle,
-/// un jeu de devinettes de mots de cinq lettres similaire à Wordle.
+/// Game logic and supporting types for Birdle,
+/// a five-letter word-guessing game similar to Wordle.
 ///
-/// Définit la machine à états [Game] et le modèle de données
-/// [Word], [Letter], et [HitType] utilisé pour
-/// représenter les tentatives et leur évaluation par rapport à un mot caché.
+/// Defines the [Game] state machine and the
+/// [Word], [Letter], and [HitType] data model used to
+/// represent guesses and their evaluation against a hidden word.
 library;
 
 import 'dart:collection';
 import 'dart:math';
 
-/// Le résultat de l'évaluation d'une [Letter] (lettre) d'une tentative par rapport au mot caché.
+/// The result of evaluating a [Letter] of a guess against the hidden word.
 enum HitType {
-  /// La lettre n'a pas encore été évaluée.
+  /// The letter hasn't yet been evaluated.
   none,
 
-  /// La lettre correspond à celle du mot caché à la même position.
+  /// The letter matches the hidden word's letter at the same position.
   hit,
 
-  /// La lettre est dans le mot caché, mais à une position différente.
+  /// The letter is in the hidden word, but at a different position.
   partial,
 
-  /// La lettre n'apparaît pas dans le mot caché.
+  /// The letter doesn't appear in the hidden word.
   miss,
 }
 
-/// Un caractère unique associé à son [HitType] par rapport au mot caché.
+/// A single character paired with its [HitType] against the hidden word.
 typedef Letter = ({String char, HitType type});
 
-/// Tous les mots qui peuvent être légalement saisis comme tentative.
+/// Every word that can be legally entered as a guess.
 const List<String> allLegalGuesses = [...legalWords, ...legalGuesses];
 
-/// Mots pouvant être choisis comme mot caché.
+/// Words that can be chosen as the hidden word.
 const List<String> legalWords = ['aback', 'abase', 'abate', 'abbey', 'abbot'];
 
-/// Mots supplémentaires acceptés comme tentatives au-delà de ceux dans [legalWords].
+/// Additional words accepted as guesses beyond those in [legalWords].
 const List<String> legalGuesses = [
   'aback',
   'abase',
@@ -47,67 +47,67 @@ const List<String> legalGuesses = [
   'abort',
 ];
 
-/// État du jeu d'une seule manche de Birdle,
-/// un jeu de devinettes de mots de cinq lettres similaire à Wordle.
+/// Game state of a single round of Birdle,
+/// a five-letter word-guessing game similar to Wordle.
 ///
-/// Expose l'état et les méthodes dont une interface utilisateur a besoin pour
-/// évaluer les tentatives et suivre la progression,
-/// mais ne fait pas avancer le jeu de lui-même.
+/// Exposes the state and methods a UI needs to
+/// evaluate guesses and track progress,
+/// but doesn't advance play on its own.
 ///
-/// Les clients pilotent chaque manche en appelant [guess] pour soumettre une tentative et
-/// [resetGame] pour recommencer.
+/// Clients drive each round by calling [guess] to submit an attempt and
+/// [resetGame] to start over.
 class Game {
-  /// Le nombre maximum par défaut de tentatives autorisées dans un [Game].
+  /// The default maximum number of guesses allowed in a [Game].
   static const int defaultMaxGuesses = 5;
 
-  /// Crée une nouvelle partie avec [maxGuesses] tentatives autorisées.
+  /// Creates a new game with [maxGuesses] guesses allowed.
   ///
-  /// Si [seed] (graine) est fourni, le mot caché est
-  /// choisi de manière déterministe à partir de [legalWords],
-  /// sinon il est sélectionné au hasard.
+  /// If [seed] is provided, the hidden word is
+  /// chosen deterministically from [legalWords],
+  /// otherwise it is selected at random.
   Game({this.maxGuesses = defaultMaxGuesses, this.seed})
     : _wordToGuess = _generateInitialWord(seed),
       _guesses = List<Word>.filled(maxGuesses, Word.empty());
 
-  /// Le nombre maximum de tentatives autorisées dans cette partie.
+  /// The maximum number of guesses allowed in this game.
   final int maxGuesses;
 
-  /// La graine utilisée pour choisir le mot caché,
-  /// ou `null` s'il a été sélectionné au hasard.
+  /// The seed used to choose the hidden word,
+  /// or `null` if it was selected at random.
   final int? seed;
 
-  /// Le mot caché actuel, exposé publiquement via [hiddenWord].
+  /// The current hidden word, exposed publicly through [hiddenWord].
   Word _wordToGuess;
 
-  /// Stockage interne pour [guesses].
+  /// Backing storage for [guesses].
   ///
-  /// Contient chaque emplacement de tentative dans l'ordre,
-  /// les emplacements non remplis étant représentés par des [Word] vides.
+  /// Holds every guess slot in order,
+  /// with unfilled slots represented by empty [Word]s.
   List<Word> _guesses;
 
-  /// Le mot que le joueur essaie de deviner.
+  /// The word the player is trying to guess.
   Word get hiddenWord => _wordToGuess;
 
-  /// Une vue non modifiable de chaque emplacement de tentative, y compris ceux encore vides.
+  /// An unmodifiable view of every guess slot, including those still empty.
   UnmodifiableListView<Word> get guesses => UnmodifiableListView(_guesses);
 
-  /// La tentative soumise la plus récente,
-  /// ou un [Word] vide si aucune tentative n'a été faite.
+  /// The most recently submitted guess,
+  /// or an empty [Word] if no guesses have been made.
   Word get previousGuess {
     final index = _guesses.lastIndexWhere((word) => word.isNotEmpty);
     return index == -1 ? Word.empty() : _guesses[index];
   }
 
-  /// L'index du prochain emplacement de tentative vide, ou `-1` si tous les emplacements sont pleins.
+  /// The index of the next empty guess slot, or `-1` if every slot is full.
   int get activeIndex => _guesses.indexWhere((word) => word.isEmpty);
 
-  /// Le nombre de tentatives encore disponibles pour le joueur.
+  /// The number of guesses still available to the player.
   int get guessesRemaining {
     if (activeIndex == -1) return 0;
     return maxGuesses - activeIndex;
   }
 
-  /// Indique si la tentative la plus récente correspond au mot caché.
+  /// Whether the most recent guess matches the hidden word.
   bool get didWin {
     if (_guesses.first.isEmpty) return false;
 
@@ -118,72 +118,74 @@ class Game {
     return true;
   }
 
-  /// Indique si toutes les tentatives autorisées ont été utilisées sans gagner.
+  /// Whether all allowed guesses have been used without winning.
   bool get didLose => guessesRemaining == 0 && !didWin;
 
-  /// Choisit un nouveau mot caché et efface chaque tentative soumise.
+  /// Picks a new hidden word and clears every submitted guess.
   void resetGame() {
     _wordToGuess = _generateInitialWord(seed);
     _guesses = List<Word>.filled(maxGuesses, Word.empty());
   }
 
-  /// Évalue [guess] par rapport au mot caché,
-  /// enregistre le résultat dans [guesses], et le retourne.
+  /// Evaluates [guess] against the hidden word,
+  /// records the result in [guesses], and returns it.
   ///
-  /// Pour un contrôle plus précis, utilisez [isLegalGuess] pour valider la saisie ou
-  /// [matchGuessOnly] pour évaluer sans enregistrer le résultat.
+  /// For finer control, use [isLegalGuess] to validate input or
+  /// [matchGuessOnly] to evaluate without recording the result.
   Word guess(String guess) {
     final result = matchGuessOnly(guess);
     addGuessToList(result);
     return result;
   }
 
-  /// Indique si [guess] est un mot valide à tenter.
+  /// Whether [guess] is a legal word to guess.
   ///
-  /// Les interfaces utilisateur peuvent appeler cette méthode avant [guess] pour
-  /// afficher un message aux joueurs lorsqu'ils saisissent un mot invalide.
-  bool isLegalGuess(String guess) => Word.fromString(guess).isLegalGuess;
+  /// UIs can call this method before [guess] to
+  /// show players a message when they enter an invalid word.
+  bool isLegalGuess(String guess) =>
+      guess.length == 5 && Word.fromString(guess).isLegalGuess;
 
-  /// Évalue [guess] par rapport au mot caché sans faire avancer le jeu.
+  /// Evaluates [guess] against the hidden word without advancing the game.
   Word matchGuessOnly(String guess) =>
       Word.fromString(guess).evaluateGuess(_wordToGuess);
 
-  /// Stocke [guess] dans le prochain emplacement vide de [guesses].
+  /// Stores [guess] in the next empty slot of [guesses].
   void addGuessToList(Word guess) {
     final guessIndex = activeIndex;
     if (guessIndex == -1) {
-      throw StateError('Aucune tentative restante.');
+      throw StateError('No guesses remaining.');
     }
 
     _guesses[guessIndex] = guess;
   }
 
-  /// Retourne le mot caché de départ pour une nouvelle manche.
+  /// Returns the starting hidden word for a new round.
   ///
-  /// Choisit un mot déterministe dans [legalWords] lorsque [seed] est fourni,
-  /// ou un mot au hasard sinon.
+  /// Picks a deterministic word from [legalWords] when [seed] is provided,
+  /// or one at random otherwise.
   static Word _generateInitialWord(int? seed) =>
       seed == null ? Word.random() : Word.fromSeed(seed);
 }
-/// Un mot de cinq lettres composé de [Letter]s, chacune suivant son [HitType].
+
+/// A five-letter word made up of [Letter]s, each tracking its [HitType].
 class Word with IterableMixin<Letter> {
-  /// Crée un mot soutenu par la liste spécifiée de [Letter]s.
+  /// Creates a word backed by the specified list of [Letter]s.
   Word(this._letters);
 
-  /// Crée un mot avec cinq lettres vides de type [HitType.none].
+  /// Creates a word with five blank letters of [HitType.none].
   factory Word.empty() =>
       Word(List<Letter>.filled(5, (char: '', type: HitType.none)));
 
-  /// Crée un [Word] à partir d'une chaîne [guess].
+  /// Creates a [Word] from [guess].
   ///
-  /// Chaque caractère est mis en minuscule,
-  /// chaque [Letter] commence avec le type [HitType.none].
+  /// Each character is lowercased,
+  /// every [Letter] starts as [HitType.none].
   factory Word.fromString(String guess) {
     if (guess.length != 5) {
       throw ArgumentError.value(
         guess,
         'guess',
-        'Doit comporter exactement 5 caractères.',
+        'Must be exactly 5 characters long.',
       );
     }
 
@@ -195,61 +197,61 @@ class Word with IterableMixin<Letter> {
     return Word(letters);
   }
 
-  /// Crée un mot choisi au hasard dans [legalWords].
+  /// Creates a word chosen at random from [legalWords].
   factory Word.random() {
     final random = Random();
     final nextWord = legalWords[random.nextInt(legalWords.length)];
     return Word.fromString(nextWord);
   }
 
-  /// Crée un mot choisi dans [legalWords] en utilisant [seed] comme index.
+  /// Creates a word chosen from [legalWords] using [seed] as an index.
   factory Word.fromSeed(int seed) =>
       Word.fromString(legalWords[seed % legalWords.length]);
 
-  /// Une liste non modifiable de [Letter]s qui composent ce mot.
+  /// An unmodifiable list of [Letter]s that make up this word.
   final List<Letter> _letters;
 
   @override
   Iterator<Letter> get iterator => _letters.iterator;
 
-  /// Indique si chaque [Letter] de ce mot n'a pas de caractère.
+  /// Whether every [Letter] in this word has no character.
   @override
   bool get isEmpty => every((letter) => letter.char.isEmpty);
 
   @override
   int get length => _letters.length;
 
-  /// La [Letter] à l'index [i] dans le mot.
+  /// The [Letter] at index [i] in word.
   Letter operator [](int i) => _letters[i];
 
   @override
   String toString() => _letters.map((letter) => letter.char).join().trim();
 
-  /// Retourne une chaîne multi-lignes montrant chaque [Letter] à côté de son [HitType].
+  /// Returns a multi-line string showing each [Letter] alongside its [HitType].
   ///
-  /// Utilisé pour jouer au jeu depuis la ligne de commande.
+  /// Used to play the game from the command line.
   String toStringVerbose() => _letters
       .map((letter) => '${letter.char} - ${letter.type.name}')
       .join('\n');
 }
 
-/// Logique de validation et d'évaluation des tentatives sur [Word].
+/// Validation and guess-evaluation logic on [Word].
 extension WordUtils on Word {
-  /// Indique si ce mot apparaît dans [allLegalGuesses].
+  /// Whether this word appears in [allLegalGuesses].
   bool get isLegalGuess => allLegalGuesses.contains(toString());
 
-  /// Compare ce [Word] au [hiddenWord] spécifié
-  /// et retourne un nouveau [Word] avec les mêmes lettres,
-  /// mais où chaque [Letter] a un nouveau [HitType] parmi
-  /// [HitType.hit], [HitType.partial], ou [HitType.miss].
+  /// Compares this [Word] against the specified [hiddenWord]
+  /// and returns a new [Word] with the same letters,
+  /// but where each [Letter] has new a [HitType] of
+  /// [HitType.hit], [HitType.partial], or [HitType.miss].
   Word evaluateGuess(Word hiddenWord) {
     assert(isLegalGuess);
 
     final result = List<Letter>.filled(length, (char: '', type: HitType.none));
-    // Compte les lettres du mot caché qui peuvent encore être réclamées comme correspondances partielles.
+    // Counts hidden-word letters that can still be claimed as partial matches.
     final unmatchedHiddenLetterCounts = <String, int>{};
 
-    // Réserve les correspondances exactes (hits) avant de calculer les correspondances partielles.
+    // Reserve exact matches before scoring partial matches.
     for (var i = 0; i < length; i++) {
       final guessChar = this[i].char;
       final hiddenChar = hiddenWord[i].char;
@@ -257,13 +259,13 @@ extension WordUtils on Word {
       if (guessChar == hiddenChar) {
         result[i] = (char: guessChar, type: HitType.hit);
       } else {
-        // Suit les lettres cachées sans correspondance exacte pour la passe des correspondances partielles.
+        // Track non-hit hidden letters for the partial-match pass.
         final unmatchedCount = unmatchedHiddenLetterCounts[hiddenChar] ?? 0;
         unmatchedHiddenLetterCounts[hiddenChar] = unmatchedCount + 1;
       }
     }
 
-    // Utilise chaque lettre cachée restante une seule fois pour les correspondances partielles.
+    // Spend each remaining hidden letter only once for partial matches.
     for (var i = 0; i < length; i++) {
       if (result[i].type == HitType.hit) continue;
 
@@ -271,7 +273,7 @@ extension WordUtils on Word {
       final unmatchedCount = unmatchedHiddenLetterCounts[guessChar] ?? 0;
       final isPartial = unmatchedCount > 0;
       if (isPartial) {
-        // Utilise une lettre cachée disponible pour cette correspondance partielle.
+        // Use one available hidden letter for this partial match.
         unmatchedHiddenLetterCounts[guessChar] = unmatchedCount - 1;
       }
 

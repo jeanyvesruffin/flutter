@@ -215,3 +215,18 @@ Vous avez restructuré votre GamePagecode pour qu'il conserve un état en créan
 Cet appel setStateindique à Flutter de reconstruire l'interface utilisateur d'un widget. Lorsqu'un utilisateur soumet une proposition, vous appelez la fonction setStatepour mettre à jour l'état du jeu, et la grille reflète automatiquement les nouvelles données. Votre application est désormais véritablement interactive !
 
 ## Animations simples
+
+Les animations implicites sont des widgets qui animent automatiquement les modifications de leurs propriétés. Vous spécifiez le nouvel état, et le widget gère l'animation pour vous, sans nécessiter de gestion manuelle.
+
+En remplaçant Containerpar AnimatedContaineret en ajoutant un duration, vos tuiles passent désormais d'une couleur à l'autre en douceur. En seulement deux lignes de code, vous avez donné une allure professionnelle à votre application !
+
+La durationpropriété `time` contrôle la durée de l'animation, tandis que curve`style` modifie son aspect. Vous avez essayé `time` Curves.decelerate, mais vous pouvez également essayer d'autres valeurs comme Curves.easeIn`time`, Curves.bounceOut`style` ou Curves.elasticIn`style`.
+
+Vous avez créé un jeu complet de type Wordle avec des widgets personnalisés, des mises en page dynamiques, la saisie utilisateur, la gestion d'état et des animations fluides. Vous possédez désormais les compétences fondamentales pour développer vos propres applications Flutter !
+
+
+
+
+## Debug
+
+Des erreurs dû à la version de l'API Android peux poser des problemes. Voir la stabilité des API, par exempel les versions 34 ou 35 sont stables (2026)
