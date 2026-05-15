@@ -205,3 +205,13 @@ Vous avez créé un GuessInputwidget de TextFieldsaisie de texte. Vous l'avez co
 Auparavant, l'autofocus mettait le champ de texte au premier lancement et _FocusNodele_ _requestFocus()_ sont conservait après chaque tentative. Ces détails donnent à votre application une impression de réactivité et de qualité.
 
 Pour répondre aux entrées de l'utilisateur, vous avez spécifié des fonctions de rappel comme `onSubmittedon` et `on` onPressed. Le passage de fonctions de rappel en tant qu'arguments du constructeur permet de conserver des widgets réutilisables et découplés de toute logique spécifique.
+
+## Widget à état
+
+Lorsqu'il est nécessaire de modifier l'apparence ou les données d'un widget au cours de sa durée de vie, un objet compagnon est requis StatefulWidget. Le widget lui-même reste immuable, mais cet Stateobjet compagnon contient des données modifiables et déclenche des reconstructions.
+
+Vous avez restructuré votre GamePagecode pour qu'il conserve un état en créant une classe associée , en y _GamePageState déplaçant la méthode et les propriétés mutables, et en implémentant l'interface appropriée . L'assistance rapide de votre IDE peut automatiser cette conversion. buildcreateState()
+
+Cet appel setStateindique à Flutter de reconstruire l'interface utilisateur d'un widget. Lorsqu'un utilisateur soumet une proposition, vous appelez la fonction setStatepour mettre à jour l'état du jeu, et la grille reflète automatiquement les nouvelles données. Votre application est désormais véritablement interactive !
+
+## Animations simples

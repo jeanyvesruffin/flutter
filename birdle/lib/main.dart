@@ -114,9 +114,14 @@ class Tile extends StatelessWidget {
   }
 }
 
-class GamePage extends StatelessWidget {
-  GamePage({super.key});
+class GamePage extends StatefulWidget {
+  const GamePage({super.key});
 
+  @override
+  State<GamePage> createState() => _GamePageState();
+}
+
+class _GamePageState extends State<GamePage> {
   final Game _game = Game();
 
   @override
@@ -124,19 +129,23 @@ class GamePage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        spacing: 5.0,
         children: [
-          for (final guess in _game.guesses)
+          for (var guess in _game.guesses)
             Row(
-              spacing: 5.0,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                for (final letter in guess) Tile(letter.char, letter.type),
+                for (var letter in guess)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.5, vertical: 2.5),
+                    child: Tile(letter.char, letter.type),
+                  )
               ],
             ),
           GuessInput(
-            onSubmitGuess: (guess) {
-              // TODO, handle guess
-              print(guess); // Temporary
+           onSubmitGuess: (String guess) {
+              setState(() { // NEW
+                _game.guess(guess);
+              });
             },
           ),
         ],
@@ -144,3 +153,4 @@ class GamePage extends StatelessWidget {
     );
   }
 }
+
